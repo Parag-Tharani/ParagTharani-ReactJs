@@ -12,17 +12,20 @@ export const allProducts = createApi({
         return headers;
       },
     }),
-    endpoints(builder) {
-
-      return {
+    endpoints:(builder) => ({
         getAllProducts: builder.query({
           query:() =>({
             url: `products`,
             method: "GET"
           })
         }),
-      };
-    },
+        getAllCategories: builder.query({
+            query:() => ({
+                url: `categories`,
+                method: "GET"
+            })
+        })
+      })
 })
 
-export const { useGetAllProductsQuery } = allProducts
+export const { useGetAllProductsQuery , useGetAllCategoriesQuery } = allProducts
