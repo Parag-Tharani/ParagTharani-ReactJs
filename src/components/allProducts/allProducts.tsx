@@ -9,6 +9,7 @@ import { useGetAllCategoriesQuery } from "../../features/productsApi";
 import { useNavigate } from "react-router-dom"
 import { useAppDispatch , useAppSelector } from "../../app/hooks" 
 import { updateFav } from "../../features/favourite";
+import { delProduct } from "../../features/deleteProduct"
 
 interface Props {
     window?: () => Window;
@@ -34,6 +35,7 @@ export function AllProducts(props: Props) {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const { favItems } = useAppSelector((state) => state.fav)
+  const { deleteProduct } = useAppSelector((state) => state.del)
 
   let responceProductData = useGetAllProductsQuery(0)  
   let responseCategories = useGetAllCategoriesQuery(0)
@@ -51,15 +53,6 @@ export function AllProducts(props: Props) {
 
   
   function SelectedItems(items : string) {
-    
-    // if(SelectedFilters.length === 0) return true;
-
-    // for(var i=0; i<SelectedFilters.length; i++){
-    //   if(SelectedFilters[i] === items){
-    //     return true
-    //   }
-    // }
-    // return false
 
     if(SelectedFilters === "") return true;
 
@@ -70,19 +63,22 @@ export function AllProducts(props: Props) {
   }
 
   function setSelectedCategories(item: string) {
-    // for(var i=0; i<SelectedFilters.length; i++){
-    //   if(SelectedFilters[i] === item){
-    //     return setSelectedFilters("")
-    //   }
-    // }
-    // return setSelectedFilters(item)
-
+    
     if(item === SelectedFilters){
       return setSelectedFilters("")
     }
 
     return setSelectedFilters(item)
 
+  }
+
+  function DeletedProducts(id: string) {
+
+    if(deleteProduct.includes(id)){
+      return true
+    }
+
+    return false
   }
 
 
@@ -177,6 +173,9 @@ export function AllProducts(props: Props) {
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {responceProductData.data.products.map((product: ProductInterface) => (
             <>
+            { DeletedProducts(product._id) ?
+            null :
+            <>
                { (SelectedItems(product.category)) ? 
             <div key={product._id} className="group" >
               <div className=" cursor-pointer " onClick={() => navigate(`/productDetails/${product._id}`)}>
@@ -192,7 +191,7 @@ export function AllProducts(props: Props) {
               </div>
                 
               <div className="w-[100%] justify-between flex items-center">
-              <button className=" bg-red-400 text-white rounded-md ml-0.5 p-2 mr-2 mt-1">Delete Product</button>
+              <button className=" bg-red-400 text-white rounded-md ml-0.5 p-2 mr-2 mt-1" onClick={() => dispatch(delProduct(product._id))}>Delete Product</button>
               { favItems.includes(product._id) ?
                 <BsFillHeartFill className=" cursor-pointer" size={20} color={"red"} onClick={() => dispatch(updateFav(product._id))} />
               :
@@ -204,6 +203,8 @@ export function AllProducts(props: Props) {
              null
             }
             </>
+            }
+          </>
           ))}
         </div>
       </div>
