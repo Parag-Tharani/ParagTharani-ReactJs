@@ -26,7 +26,7 @@ export function ProductDetails() {
               <iframe src="https://giphy.com/embed/jAYUbVXgESSti" title="Loading Categories..." width="480" height="270" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>
             </div>
       :
-         <div className="flex font-sans w-[70vw] mx-auto mt-10 border rounded ">
+         <div className="flex flex-wrap font-sans w-[70vw] mx-auto mt-10 border rounded ">
   <div className="flex-none w-56 relative">
     <img src={resonseProducDetails.data.product.avatar} alt="" className="absolute inset-0 w-full h-full object-cover rounded-lg" loading="lazy" />
   </div>
