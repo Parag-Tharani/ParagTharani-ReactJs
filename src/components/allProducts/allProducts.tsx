@@ -1,5 +1,5 @@
 import React from "react";
-import { BsHeart } from "react-icons/bs"
+import { BsHeart, BsFillHeartFill } from "react-icons/bs"
 import { HiAdjustments } from "react-icons/hi"
 import { AiOutlineClose } from "react-icons/ai"
 import { CreateButton } from "../createProduct/createButton";
@@ -7,6 +7,8 @@ import { Drawer } from "@mui/material";
 import { useGetAllProductsQuery } from "../../features/productsApi";
 import { useGetAllCategoriesQuery } from "../../features/productsApi";
 import { useNavigate } from "react-router-dom"
+import { useAppDispatch , useAppSelector } from "../../app/hooks" 
+import { updateFav } from "../../features/favourite";
 
 interface Props {
     window?: () => Window;
@@ -30,6 +32,9 @@ interface CategoriesInterface {
 export function AllProducts(props: Props) {
 
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { favItems } = useAppSelector((state) => state.fav)
+
   let responceProductData = useGetAllProductsQuery(0)  
   let responseCategories = useGetAllCategoriesQuery(0)
   let [ SelectedFilters, setSelectedFilters] = React.useState("")
@@ -153,8 +158,8 @@ export function AllProducts(props: Props) {
             </div>
 
             <div className="flex justify-center items-start text-gray-500 ">
-                <button className="text-xl hover:text-gray-700 hover:underline">Favourites</button>
-                <p className="z-10 bg-red-400 rounded-full px-1 text-xs text-center text-white">{0}</p>
+                <button className="text-xl hover:text-gray-700 hover:underline" onClick={() => navigate('/favourites')}>Favourites</button>
+                <p className="z-10 bg-red-400 rounded-full px-1 text-xs text-center text-white">{favItems.length}</p>
             </div>
         </div>
 
@@ -173,8 +178,8 @@ export function AllProducts(props: Props) {
           {responceProductData.data.products.map((product: ProductInterface) => (
             <>
                { (SelectedItems(product.category)) ? 
-            <div key={product._id} className="group" onClick={() => navigate(`/productDetails/${product._id}`)}>
-              <div className=" cursor-pointer ">
+            <div key={product._id} className="group" >
+              <div className=" cursor-pointer " onClick={() => navigate(`/productDetails/${product._id}`)}>
               <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
                 <img
                   src={product.avatar}
@@ -188,8 +193,11 @@ export function AllProducts(props: Props) {
                 
               <div className="w-[100%] justify-between flex items-center">
               <button className=" bg-red-400 text-white rounded-md ml-0.5 p-2 mr-2 mt-1">Delete Product</button>
-              <BsHeart size={20} color="red"/>
-              {/* <BsFillHeartFill size={20} color={"red"} /> */}
+              { favItems.includes(product._id) ?
+                <BsFillHeartFill className=" cursor-pointer" size={20} color={"red"} onClick={() => dispatch(updateFav(product._id))} />
+              :
+                <BsHeart className=" cursor-pointer" size={20} color="red" onClick={() => dispatch(updateFav(product._id))}/>
+              }
               </div>
             </div>
             :
@@ -200,7 +208,7 @@ export function AllProducts(props: Props) {
         </div>
       </div>
     </div>
-    }
-        </>
-    )
+      }
+    </>
+  )
 }

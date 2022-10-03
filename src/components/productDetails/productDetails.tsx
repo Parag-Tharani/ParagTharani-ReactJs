@@ -1,10 +1,15 @@
 import React from "react";
 import { useGetProductDetailsQuery } from "../../features/productsApi";
+import { BsHeart, BsFillHeartFill } from "react-icons/bs"
+import { useAppDispatch , useAppSelector } from "../../app/hooks" 
 import { useParams } from "react-router-dom"
+import { updateFav } from "../../features/favourite";
 
 export function ProductDetails() {
 
-    let { id } = useParams()
+  let { id } = useParams()
+  const dispatch = useAppDispatch()
+  const { favItems } = useAppSelector((state) => state.fav)
 
     const resonseProducDetails = useGetProductDetailsQuery(id)
 
@@ -21,7 +26,7 @@ export function ProductDetails() {
               <iframe src="https://giphy.com/embed/jAYUbVXgESSti" title="Loading Categories..." width="480" height="270" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>
             </div>
       :
-         <div className="flex font-sans w-[80vw] mx-auto mt-10">
+         <div className="flex font-sans w-[70vw] mx-auto mt-10 border rounded ">
   <div className="flex-none w-56 relative">
     <img src={resonseProducDetails.data.product.avatar} alt="" className="absolute inset-0 w-full h-full object-cover rounded-lg" loading="lazy" />
   </div>
@@ -34,11 +39,11 @@ export function ProductDetails() {
         ${resonseProducDetails.data.product.price}
       </div>
       <div className="flex space-x-4 mb-5 text-sm font-medium">
-      {/* <button className="flex-none flex items-center justify-center w-9 h-9 rounded-full text-violet-600 bg-violet-50" type="button" aria-label="Like">
-        <svg width="20" height="20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
-        </svg>
-      </button> */}
+      { favItems.includes(resonseProducDetails.data.product._id) ?
+        <BsFillHeartFill className=" cursor-pointer" size={20} color={"red"} onClick={() => dispatch(updateFav(resonseProducDetails.data.product._id))} />
+        :
+        <BsHeart className=" cursor-pointer" size={20} color="red" onClick={() => dispatch(updateFav(resonseProducDetails.data.product._id))}/>
+      }
     </div>
     </div>
     <p className="text-md text-slate-500 my-5">

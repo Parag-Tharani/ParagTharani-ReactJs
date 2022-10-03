@@ -5,6 +5,7 @@ import { Navbar } from './components/navbar/navbar';
 import { AllProducts } from './components/allProducts/allProducts';
 import { CreateProduct } from './components/createProduct/createProduct';
 import { ProductDetails } from './components/productDetails/productDetails';
+import { Favourites } from './components/favourites/favourites';
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<AllProducts />} />
         <Route path='/productDetails/:id' element={<ProductDetails />} />
+        <Route path='/favourites' element={<Favourites />} />
         <Route path='/createProduct' element={<CreateProduct />} />
       </Routes>
     </div>
