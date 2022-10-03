@@ -24,8 +24,24 @@ export const allProducts = createApi({
                 url: `categories`,
                 method: "GET"
             })
+        }),
+        getProductDetails : builder.query({
+            query:(id) => ({
+                url: `products/${id}`,
+                method: "GET"
+            })
+        }),
+        createProduct : builder.mutation({
+          query:(body) => ({
+            url:`products`,
+            method:"POST",
+            body,
+            headers:{
+              "Content-Type":"application/json"
+            }
+          })
         })
       })
 })
 
-export const { useGetAllProductsQuery , useGetAllCategoriesQuery } = allProducts
+export const { useGetAllProductsQuery , useGetAllCategoriesQuery, useGetProductDetailsQuery, useCreateProductMutation } = allProducts

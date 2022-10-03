@@ -1,12 +1,12 @@
 import React from "react";
-import { BsHeart , BsFillHeartFill } from "react-icons/bs"
+import { BsHeart } from "react-icons/bs"
 import { HiAdjustments } from "react-icons/hi"
 import { AiOutlineClose } from "react-icons/ai"
 import { CreateButton } from "../createProduct/createButton";
 import { Drawer } from "@mui/material";
 import { useGetAllProductsQuery } from "../../features/productsApi";
-import { useGetAllCategoriesQuery } from "../../features/categoriesApi";
-
+import { useGetAllCategoriesQuery } from "../../features/productsApi";
+import { useNavigate } from "react-router-dom"
 
 interface Props {
     window?: () => Window;
@@ -29,10 +29,10 @@ interface CategoriesInterface {
 
 export function AllProducts(props: Props) {
 
-
-  const responceProductData = useGetAllProductsQuery(0)  
-  const responseCategories = useGetAllCategoriesQuery(0)
-  const SelectedFilters: String[] = ["Clothing"]
+  const navigate = useNavigate()
+  let responceProductData = useGetAllProductsQuery(0)  
+  let responseCategories = useGetAllCategoriesQuery(0)
+  let [ SelectedFilters, setSelectedFilters] = React.useState("")
 
 
     const { window } = props;
@@ -44,26 +44,40 @@ export function AllProducts(props: Props) {
   };
 
 
-  function SelectedItemsCategories(items: string){
-    for(var i=0; i<SelectedFilters.length; i++){
-      if(SelectedFilters[i] === items){
-        return true
-      }
+  
+  function SelectedItems(items : string) {
+    
+    // if(SelectedFilters.length === 0) return true;
+
+    // for(var i=0; i<SelectedFilters.length; i++){
+    //   if(SelectedFilters[i] === items){
+    //     return true
+    //   }
+    // }
+    // return false
+
+    if(SelectedFilters === "") return true;
+
+    if(items === SelectedFilters){
+      return true
     }
     return false
   }
 
+  function setSelectedCategories(item: string) {
+    // for(var i=0; i<SelectedFilters.length; i++){
+    //   if(SelectedFilters[i] === item){
+    //     return setSelectedFilters("")
+    //   }
+    // }
+    // return setSelectedFilters(item)
 
-  function SelectedItems(items : string) {
-    
-    if(SelectedFilters.length === 0) return true;
-
-    for(var i=0; i<SelectedFilters.length; i++){
-      if(SelectedFilters[i] === items){
-        return true
-      }
+    if(item === SelectedFilters){
+      return setSelectedFilters("")
     }
-    return false
+
+    return setSelectedFilters(item)
+
   }
 
 
@@ -82,10 +96,10 @@ export function AllProducts(props: Props) {
           {
             responseCategories.data.categories.map((items: CategoriesInterface) => {
               return <div key={items._id} className=" flex pt-1 rounded mx-auto w-[95%] text-md font-serif pb-1 pl-5 cursor-pointer hover:bg-stone-400">
-                { SelectedItemsCategories(items.name) ? 
-                  <p className="bg-stone-400 rounded-md px-2">{items.name}</p>
+                { (items.name === SelectedFilters) ? 
+                  <p className="bg-stone-400 rounded-md px-2" onClick={() => setSelectedCategories(items.name)}>{items.name}</p>
                 :
-                  <p>{items.name}</p>
+                  <p onClick={() => setSelectedCategories(items.name)}>{items.name}</p>
                 }
                 </div>
             })
@@ -127,12 +141,14 @@ export function AllProducts(props: Props) {
 
                 
                 <div className="flex max-w-[25vw] overflow-x-scroll no-scrollbar ml-2 ">
-                {SelectedFilters.map((items, index) => (
-                    <div key={index} className="flex justify-center items-center ml-2 border rounded">
-                        <p className="mr-1 px-1">{items}</p>
-                        <AiOutlineClose />
+                {/* {SelectedFilters.map((items, index) => ( */}
+                { (SelectedFilters !== "") ?
+                    <div className="flex justify-center items-center ml-2 border rounded">
+                        <p className="mr-1 px-1">{SelectedFilters}</p>
+                        <AiOutlineClose onClick={() => setSelectedFilters("")} />
                     </div>
-                ))}
+                :null}
+                {/* ))} */}
                 </div>
             </div>
 
@@ -149,15 +165,15 @@ export function AllProducts(props: Props) {
         </div>
 
         :
-        
+
     <div className="bg-white pb-10">
       <div className="mx-auto max-w-2xl lg:max-w-7xl lg:px-8">
 
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
           {responceProductData.data.products.map((product: ProductInterface) => (
             <>
-               { SelectedItems(product.category) ? 
-            <div key={product._id} className="group">
+               { (SelectedItems(product.category)) ? 
+            <div key={product._id} className="group" onClick={() => navigate(`/productDetails/${product._id}`)}>
               <div className=" cursor-pointer ">
               <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-w-7 xl:aspect-h-8">
                 <img
