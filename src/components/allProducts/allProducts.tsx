@@ -86,6 +86,10 @@ export function AllProducts(props: Props) {
     <div className="w=[100vw] mt-5">
       <h1 className=" w-[100%] text-lg font-bold text-zinc-800 mb-2 pl-5">Categories</h1>
 
+      {responseCategories.status === "rejected" ?
+      <h1 className="text-center font-sans font-semibold text-zinc-700 mt-4 px-1">Fetching Data Request Rejected :(</h1>
+      :
+      <>
       {responseCategories.isLoading ? 
 
         <div className="w-[98vw] flex items-start pt-20 justify-center">
@@ -107,17 +111,22 @@ export function AllProducts(props: Props) {
           }
         </div>
       }
-
+      </>
+    }
     </div>
   );
 
     return (
         <>
-        <CreateButton />
+        {/* <CreateButton /> */}
         <div>
             <h1 className="w-auto pl-[5vw] text-4xl font-medium font-serif mt-5">All Products</h1>
         </div>
 
+        {responceProductData.status === "rejected" ?
+              <h1 className="text-center font-sans font-semibold text-zinc-700 mt-[20vh] text-4xl">Fetching Data Request Rejected :(</h1>
+            :
+            <>
         <div className="flex justify-between items-center w-[90vw] mx-auto mt-10 m-5">
             <div className="flex justify-center items-center cursor-pointer">
                 <HiAdjustments size={19} />
@@ -159,7 +168,8 @@ export function AllProducts(props: Props) {
             </div>
         </div>
 
-    { responceProductData.isLoading ? 
+        <CreateButton />
+    {responceProductData.isLoading ? 
 
         <div className="w-[98vw] flex items-start pt-20 justify-center">
           <iframe src="https://giphy.com/embed/ZO9b1ntYVJmjZlsWlm" title="Loading..." width="480" height="360" frameBorder="0" className="giphy-embed" allowFullScreen></iframe>
@@ -167,7 +177,7 @@ export function AllProducts(props: Props) {
 
         :
 
-    <div className="bg-white pb-10">
+    <div className="bg-white p-5 pb-10">
       <div className="mx-auto max-w-2xl lg:max-w-7xl lg:px-8">
 
         <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
@@ -210,6 +220,8 @@ export function AllProducts(props: Props) {
       </div>
     </div>
       }
+      </>
+}
     </>
   )
 }

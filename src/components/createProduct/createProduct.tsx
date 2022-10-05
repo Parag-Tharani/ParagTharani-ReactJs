@@ -16,7 +16,7 @@ export function CreateProduct() {
     const [category , setCategory] = React.useState("")
     const [description , setDescription] = React.useState("")
     const [avatar , setAvatar] = React.useState("")
-    const [email , setEmail] = React.useState("ParagTharani24@gmail.com")
+    const [email , setEmail] = React.useState("paragtharani24@gmail.com")
 
     const [error ,setError] = React.useState(false);
 

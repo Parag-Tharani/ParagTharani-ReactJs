@@ -50,7 +50,7 @@ export function Favourites() {
                 return <>
                 { (isFav(product._id)) ?
                 
-<div key={product._id} className="flex font-sans w-[70vw] mx-auto my-10 border rounded ">
+<div key={product._id} className="flex flex-wrap font-sans w-[70vw] mx-auto my-10 border rounded ">
   <div className="flex-none w-56 relative">
     <img src={product.avatar} alt="" className="absolute inset-0 w-full h-full object-cover rounded-lg" loading="lazy" />
   </div>
